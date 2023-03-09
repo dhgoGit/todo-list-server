@@ -1,10 +1,8 @@
-package com.example.todolistspring.task_manager.task
+package com.example.todolistspring.task.task_manager.task_models
 
-import com.example.todolistspring.task_manager.TaskManager
+import com.example.todolistspring.task.task_manager.Task
 import com.example.todolistspring.util.logInfo
-import org.springframework.stereotype.Component
 import java.util.*
-
 class PeriodTask(
     override val taskName: String,
     override val memo: String,
@@ -25,7 +23,7 @@ class PeriodTask(
             |endDate : $endDate
         """.trimMargin()
     }
-    fun setStartAndEnd(startDate: Calendar = this.startDate, endDate:Calendar = this.endDate){
+    fun setStartAndEnd(startDate: Calendar = this.startDate, endDate: Calendar = this.endDate){
         if (startDate.after(endDate)){
             throw Error("the 'endDate' have to be after 'startDate'")
         }

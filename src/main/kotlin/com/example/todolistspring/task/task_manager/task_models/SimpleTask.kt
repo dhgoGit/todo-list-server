@@ -1,7 +1,6 @@
-package com.example.todolistspring.task_manager.task
+package com.example.todolistspring.task.task_manager.task_models
 
-import com.example.todolistspring.task_manager.TaskManager
-import org.springframework.stereotype.Component
+import com.example.todolistspring.task.task_manager.Task
 import java.util.*
 
 class SimpleTask(
@@ -16,7 +15,7 @@ class SimpleTask(
             |startDate : $startDate
         """.trimMargin()
     }
-    fun setStart(startDate:Calendar){
+    fun setStart(startDate: Calendar){
         this.startDate = startDate
     }
 }

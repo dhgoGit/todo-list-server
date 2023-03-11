@@ -15,17 +15,16 @@ data class RequestDataForm(
     @JsonProperty("resolve_option")
     val resolveOption: TaskResolveOption? = null,
 ) {
-    companion object {
-        fun requireId(requestDataForm: RequestDataForm) = run {
-            requestDataForm.taskId!!
-        }
-
-        fun requireTask(requestDataForm: RequestDataForm) = run {
-            requestDataForm.task!!
-        }
-
-        fun requireResolveOption(requestDataForm: RequestDataForm) = run {
-            requestDataForm.resolveOption!!
-        }
+    fun requireId() = run {
+        taskId!!
     }
+
+    fun requireTask() = run {
+        task!!
+    }
+
+    fun requireResolveOption() = run {
+        resolveOption!!
+    }
+
 }

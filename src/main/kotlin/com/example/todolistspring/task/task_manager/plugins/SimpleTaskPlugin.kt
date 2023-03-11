@@ -19,35 +19,28 @@ class SimpleTaskPlugin : Plugin {
         }
     }
 
-    private fun create(data: RequestDataForm?) = run {
-        RequestDataForm.requireTask(data!!)
+    private fun create(data: RequestDataForm) = run {
+        data.requireTask()
             .checkValidate()
             .apply {
                 //todo dao 가 필요해.
             }
     }
 
-    private fun read(data:RequestDataForm?) = run{
-        val id =
-            RequestDataForm
-                .requireId(data!!)
+    private fun read(data: RequestDataForm) = run{
+        val id =data.requireId()
         print("")
     }
 
-    private fun delete(data: RequestDataForm?) = run {
-        data!!.taskId
-            .let {
-                //todo dao 가 필요해.
-            }
+    private fun delete(data: RequestDataForm) = run {
+        data.requireId()
     }
 
-    private fun update(data: RequestDataForm?) = run {
+    private fun update(data: RequestDataForm) = run {
         val id =
-            RequestDataForm
-                .requireId(data!!)
+            data.requireId()
         val task =
-            RequestDataForm
-                .requireTask(data!!)
+            data.requireTask()
                 .run{
                     //todo dao 가 필요해.
                     val origin = SimpleTask("원본 데이터","흠", Calendar.getInstance())//날짜 관련 유틸 함수가 필요함.

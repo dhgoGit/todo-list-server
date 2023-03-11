@@ -10,6 +10,6 @@ interface TaskService {
 
     fun edit(task: Task): Task
 
-    fun findTaskWith(id: String, option: FindOption): List<Task>
+    fun findTaskWith(id: String): List<Task>
 
 }

@@ -1,21 +1,26 @@
 package com.example.todolistspring.task.task_manager.task_models
 
 import com.example.todolistspring.task.task_manager.Task
+import com.example.todolistspring.task.task_manager.enums.TaskType
 import com.example.todolistspring.util.logInfo
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
-class PeriodTask(
-    override val taskName: String,
-    override val memo: String,
-    private var startDate: Calendar,
-    private var endDate: Calendar
+
+data class PeriodTask(
+    @JsonProperty("task_name")
+    override var taskName: String?,
+    @JsonProperty("memo")
+    override var memo: String?,
+    @JsonProperty("start_date")
+    private var startDate: Calendar?,
+    @JsonProperty("end_date")
+    private var endDate: Calendar?
 ) : Task {
     init {
-        if (startDate.after(endDate)){
-            throw Error("the 'endDate' have to be after 'startDate'")
-        }
         logInfo("PeriodTask Generated")
     }
-    override fun print(): String = run{
+
+    override fun print(): String = run {
         """
             |taskName : $taskName
             |memo : $memo
@@ -23,18 +28,14 @@ class PeriodTask(
             |endDate : $endDate
         """.trimMargin()
     }
-    fun setStartAndEnd(startDate: Calendar = this.startDate, endDate: Calendar = this.endDate){
-        if (startDate.after(endDate)){
-            throw Error("the 'endDate' have to be after 'startDate'")
-        }
-        this.startDate = startDate
-        this.endDate = endDate
-    }
 
-    fun getStartDate(): Calendar {
-        return this.startDate
-    }
-    fun getEndDate(): Calendar {
-        return this.endDate
+    override fun checkValidate():Task {
+        this::class.java.fields
+            .forEach { it!! } //check not null
+
+        startDate
+            ?.takeIf { it.after(endDate) }
+            ?.let { throw Error("the 'endDate' have to be after 'startDate'") } //validation check
+        return this
     }
 }

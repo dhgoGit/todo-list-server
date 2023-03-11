@@ -1,35 +1,39 @@
 package com.example.todolistspring.task.task_manager
 
+import com.example.todolistspring.task.task_manager.dto.RequestDataForm
+import com.example.todolistspring.task.task_manager.enums.TaskResolveOption
 import com.example.todolistspring.task.task_manager.enums.TaskType
-import com.example.todolistspring.util.logError
-import org.reflections.Reflections
 
 object PluginManager {
-    private val pluginMap:Map<TaskType, Plugin>
+    private val pluginMap: Map<Class<in Task>, Plugin>
 
     init {
-        registerAnnotatedTasks()
-        pluginMap = registerAnnotatedTasks()
+        pluginMap = getPluginMap()
     }
 
-    fun getPlugin(taskType:TaskType): Plugin? {
-        return pluginMap[taskType]
+    /**
+     * 유효성 검사와 함께 Plugin으로 편집한 Task를 넘겨준다.
+     **/
+    fun resolveTask(data: RequestDataForm?) = run {
+        data?.task
+            ?.run{
+                pluginMap[this.javaClass]!!
+                    .resolve(data)
+        }
     }
 
-    private fun registerAnnotatedTasks(): HashMap<TaskType, Plugin> {
-        val tempPluginMap = HashMap<TaskType, Plugin>()
+    private fun getPluginMap(): HashMap<Class<in Task>, Plugin> {
+        val tempPluginMap = HashMap<Class<in Task>, Plugin>()
 
-        Reflections("com.example.todolistspring.task.data")
-            .getTypesAnnotatedWith(PluginAnnotation::class.java)
-            .forEach {
-                try{
-                    val type = it.getAnnotation(PluginAnnotation::class.java).value
-                    val plugin = it.newInstance() as Plugin
-                    tempPluginMap[type] = plugin
-                }catch (e:Error){
-                    logError("$it is not a plugin type!!")
-                }
+        TaskType
+            .values()
+            .forEach { type ->
+                tempPluginMap[type.task.javaClass] =
+                    type.plugin
+                        .getConstructor()
+                        .newInstance()
             }
         return tempPluginMap
     }
+
 }

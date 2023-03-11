@@ -1,12 +1,17 @@
 package com.example.todolistspring.task.task_manager.task_models
 
 import com.example.todolistspring.task.task_manager.Task
+import com.example.todolistspring.task.task_manager.enums.TaskType
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 
-class SimpleTask(
-    override val taskName: String,
-    override val memo: String,
-    var startDate: Calendar
+data class SimpleTask(
+    @JsonProperty("task_name")
+    override var taskName: String?,
+    @JsonProperty("memo")
+    override var memo: String?,
+    @JsonProperty("start_date")
+    var startDate: Calendar?
 ) : Task {
     override fun print(): String = run{
         """
@@ -15,7 +20,10 @@ class SimpleTask(
             |startDate : $startDate
         """.trimMargin()
     }
-    fun setStart(startDate: Calendar){
-        this.startDate = startDate
+
+    override fun checkValidate() :Task{
+        this::class.java.fields
+            .forEach { it!! } //check not null
+        return this
     }
 }
